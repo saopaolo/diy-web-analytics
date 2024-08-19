@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Example</title>
+    <script>
+        // Configuration
+        const serverEndpoint = 'https://your-server-url.com/api/track'; // Replace with your server URL
+
+        // Function to send data to the server
+        function sendData(data) {
+            fetch(serverEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }).catch(error => console.error('Error sending data:', error));
+        }
+
+        // Track page view
+        function trackPageView() {
+            const pageData = {
+                eventType: 'page_view',
+                url: window.location.href,
+                timestamp: new Date().toISOString(),
+            };
+            sendData(pageData);
+        }
+
+        // Track click events
+        function trackClickEvent(event) {
+            const clickData = {
+                eventType: 'click',
+                element: event.target.tagName,
+                id: event.target.id || null,
+                class: event.target.className || null,
+                timestamp: new Date().toISOString(),
+            };
+            sendData(clickData);
+        }
+
+        // Initialize tracking
+        function initTracking() {
+            // Track the initial page view
+            trackPageView();
+
+            // Add event listener for clicks
+            document.addEventListener('click', trackClickEvent);
+        }
+
+        // Wait for the DOM to be fully loaded before initializing tracking
+        document.addEventListener('DOMContentLoaded', initTracking);
+    </script>
+</head>
+<body>
+    <h1>Tracking Example Page</h1>
+    <button id="sampleButton">Click me</button>
+</body>
+</html>
